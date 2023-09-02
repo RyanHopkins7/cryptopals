@@ -1,0 +1,2 @@
+# The Cryptopals Crypto Challenges
+These are my attempts at solutions to the [Cryptopals Crypto Challenges](https://www.cryptopals.com/) with a bit of explanation here and there that hopefully might be helpful to others trying to work through the challenges and/or learn crypto. I'm more than happy to discuss my solutions or answer any questions that are in my capability to answer, so don't be afraid to send me an email at ryanhopk@umich.edu.
