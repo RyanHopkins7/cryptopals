@@ -19,12 +19,13 @@ def decodeSingleByteXOR(hex, words_set):
             most_words = n_words
             p = msg
 
-    return p
+    return p, most_words
 
-# words.txt from https://github.com/dwyl/english-words
-words_file = open('words.txt')
-words = [l.lower().strip() for l in words_file.readlines()]
 
-c = 0x1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
+if __name__ == '__main__':
+    # words.txt from https://github.com/dwyl/english-words
+    words_file = open('words.txt')
+    words = [l.lower().strip() for l in words_file.readlines()]
+    c = 0x1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
 
-print(decodeSingleByteXOR(c, set(words)))
+    print(decodeSingleByteXOR(c, set(words))[1])
