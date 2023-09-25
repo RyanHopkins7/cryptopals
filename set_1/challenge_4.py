@@ -5,18 +5,19 @@ from challenge_3 import decodeSingleByteXOR
 
 
 if __name__ == '__main__':
-    words_file = open('words.txt')
-    words = [l.lower().strip() for l in words_file.readlines()]
-
     hex_strings_file = open('4.txt')
     hex_strings = list(int(l.lower().strip(), 16) for l in hex_strings_file.readlines())
+    hex_strings_file.close()
+
+    pt = ''
+    best_score = 0
+    key = None
 
     # Iterate through all hex strings, run decodeSingleByteXOR,
-    # and find the decoded string which contains >1 word
+    # and find the decoded string which scores highest
     for h in hex_strings:
-        try:
-            out = decodeSingleByteXOR(h, words)
-            if out[1] > 1:
-                print(out[0])
-        except UnicodeDecodeError:
-            pass
+        res = decodeSingleByteXOR(h)
+        if res[1] > best_score:
+            pt, best_score, key = res
+
+    print(pt, best_score, key)

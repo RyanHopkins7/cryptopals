@@ -1,31 +1,41 @@
 # Single-byte XOR cipher
 # https://www.cryptopals.com/sets/1/challenges/3
 
-# The method I'm using to 'score' English plaintext is by the 
-# number of english words which can be deciphered from it.
-# The plaintext with the highest number of words is selected.
-def decodeSingleByteXOR(hex, words_set):
-    most_words = 0
+# Iterate over all possible key values and select the one which scores highest
+def decodeSingleByteXOR(hex):
     p = ''
+    best_score = 0
+    key = None
 
-    for k in range(0, 128):
-        msg_bytes = bytes(b ^ k for b in hex.to_bytes((hex.bit_length() + 7) // 8, 'big'))
-        msg = msg_bytes.decode('utf-8')
+    for cand in range(0, 128):
+        msg_bytes = bytes(b ^ cand for b in hex.to_bytes((hex.bit_length() + 7) // 8, 'big'))
+        utf8_msg = msg_bytes.decode('utf-8', errors='replace').lower()
+        
+        hist = {}
+        for c in utf8_msg:
+            # group all chars which are not a space or letter together
+            if ord(c) != 0x20 and (ord(c) < 0x61 or ord(c) > 0x7a):
+                c = 'nonalpha'
 
-        msg_word_set = set(msg.lower().split(' '))
-        n_words = len(set.intersection(msg_word_set, words_set))
+            if c in hist:
+                hist[c] += 1
+            else:
+                hist[c] = 1
 
-        if n_words > most_words:
-            most_words = n_words
-            p = msg
+        # In English text, space is the most common character
+        # Source: https://en.wikipedia.org/wiki/Letter_frequency
+        # So, here we're looking for the key which produces the most spaces
+        # in the plaintext relative to the most frequent character group
 
-    return p, most_words
+        most_frequent = sorted(hist.items(), key=lambda p: p[1], reverse=True)[0]
+        if ' ' in hist and hist[' '] / most_frequent[1] > best_score:
+            best_score = hist[' '] / most_frequent[1]
+            p = utf8_msg
+            key = cand
+
+    return p, best_score, chr(key)
 
 
 if __name__ == '__main__':
-    # words.txt from https://github.com/dwyl/english-words
-    words_file = open('words.txt')
-    words = [l.lower().strip() for l in words_file.readlines()]
     c = 0x1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
-
-    print(decodeSingleByteXOR(c, set(words))[1])
+    print(decodeSingleByteXOR(c))
