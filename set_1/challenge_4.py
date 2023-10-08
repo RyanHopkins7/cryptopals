@@ -6,7 +6,7 @@ from challenge_3 import decodeSingleByteXOR
 
 if __name__ == '__main__':
     hex_strings_file = open('4.txt')
-    hex_strings = list(int(l.lower().strip(), 16) for l in hex_strings_file.readlines())
+    hex_strings = [int(l.lower().strip(), 16) for l in hex_strings_file.readlines()]
     hex_strings_file.close()
 
     pt = ''
