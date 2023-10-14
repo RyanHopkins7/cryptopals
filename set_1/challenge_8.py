@@ -11,7 +11,7 @@ if __name__ == '__main__':
     for i, ct in enumerate(cts):
         # The logic here is that in AES-ECB, the same 16 byte plaintext block
         # will always encrypt to the same 16 byte ciphertext.
-        # Therefore, we're looking for the ciphertext which contains repeated blocks
+        # Therefore, we're looking for the ciphertext which contains repeated blocks.
         blocks = [ct[i:i+16] for i in range(0, len(cts), 16)]
         if len(blocks) != len(set(blocks)):
             print(f'The ciphertext on line {i+1} is encrypted using AES-ECB')
