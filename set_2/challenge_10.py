@@ -20,10 +20,10 @@ def AES_CBC_Encrypt(data, iv, key):
 
         blocks[i] = block_ct
 
-    return reduce(lambda x,y: x+y, blocks[1:])
+    return reduce(lambda x,y: x+y, blocks)
 
-def AES_CBC_Decrypt(data, iv, key):
-    blocks = [iv] + [data[i:i+16] for i in range(0, len(data), 16)]
+def AES_CBC_Decrypt(data, key):
+    blocks = [data[i:i+16] for i in range(0, len(data), 16)]
     cipher = Cipher(algorithms.AES(key), modes.ECB())
 
     for i in range(1, len(blocks)):
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     test_ct = AES_CBC_Encrypt(test_msg, test_iv, test_key)
     print('Test ciphertext: ' + str(test_ct))
 
-    test_pt = AES_CBC_Decrypt(test_ct, test_iv, test_key)
+    test_pt = AES_CBC_Decrypt(test_ct, test_key)
     print('Test plaintext: ' + test_pt.decode('utf-8'))
 
     file = open('10.txt')
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     file.close()
 
     file_ct = base64.b64decode(b64_ct)
-    file_pt = AES_CBC_Decrypt(file_ct, test_iv, test_key)
+    file_pt = AES_CBC_Decrypt(test_iv + file_ct, test_key)
 
     print('File plaintext:')
     print(file_pt.decode('utf-8'))
