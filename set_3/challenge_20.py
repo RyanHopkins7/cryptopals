@@ -1,3 +1,6 @@
+# Break fixed-nonce CTR statistically
+# https://cryptopals.com/sets/3/challenges/20
+
 from challenge_18 import aes_ctr_encrypt
 from os import urandom
 from base64 import b64decode
